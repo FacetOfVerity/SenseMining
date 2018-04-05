@@ -24,8 +24,11 @@ namespace SenseMining.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.Entity<Transaction>().HasKey(a => a.Id);
             modelBuilder.Entity<TransactionItem>().HasKey(a => new {a.TransactionId, a.ProductId});
+            modelBuilder.Entity<Product>().HasKey(a => a.Id);
+            modelBuilder.Entity<Node>().HasKey(a => a.Id);
+            modelBuilder.Entity<ProductFrequency>().HasKey(a => a.ProductId);
         }
     }
 }

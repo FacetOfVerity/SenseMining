@@ -1,30 +1,59 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using SenseMining.Database;
+using SenseMining.Utils.AspNetCore.Mvc.Filters;
 
 namespace SenseMining.API
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public IHostingEnvironment Environment { get; }
+        public IConfigurationRoot Configuration { get; }
+
+        public Startup(IHostingEnvironment env)
         {
+            Environment = env;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddLogging();
+            //MVC
+            services.AddMvc(options =>
+                {
+                    options.Filters.AddService(typeof(ExceptionFilter));
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+            services.AddScoped<ExceptionFilter>();
+
+            //Entity framework
+            services.AddDbContext<DatabaseContext>(options =>
+            {
+                options.UseNpgsql(Configuration["ConnectionStrings:SenseMiningStore"],
+                    o => o.MigrationsAssembly("SenseMining.API"));
+            });
+        }
+
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseStaticFiles();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

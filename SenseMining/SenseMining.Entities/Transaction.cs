@@ -6,8 +6,18 @@ namespace SenseMining.Entities
     public class Transaction
     {
         [Key]
-        public int TransactionId { get; set; }
+        public int Id { get; set; }
 
         public ICollection<TransactionItem> Items { get; set; }
+
+        public Transaction()
+        {
+            
+        }
+
+        public Transaction(int tid)
+        {
+            Id = tid;
+        }
     }
 }

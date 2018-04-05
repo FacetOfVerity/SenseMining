@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.API", "SenseMining\SenseMining.API.csproj", "{B28758B1-97FD-4688-BEB0-397A24DB55DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.API", "SenseMining\SenseMining.API.csproj", "{B28758B1-97FD-4688-BEB0-397A24DB55DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Database", "SenseMining.Database\SenseMining.Database.csproj", "{6CE920DD-D4EF-4920-AA1F-286C4C82AFAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Database", "SenseMining.Database\SenseMining.Database.csproj", "{6CE920DD-D4EF-4920-AA1F-286C4C82AFAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Entities", "SenseMining.Entities\SenseMining.Entities.csproj", "{9982F405-4761-484D-BCF6-932ED5A20CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Entities", "SenseMining.Entities\SenseMining.Entities.csproj", "{9982F405-4761-484D-BCF6-932ED5A20CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.TransactionsProcessor", "SenseMining.TransactionsProcessor\SenseMining.TransactionsProcessor.csproj", "{FD58774D-8426-4BBA-A5A2-9F1491F210D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.TransactionsProcessor", "SenseMining.TransactionsProcessor\SenseMining.TransactionsProcessor.csproj", "{FD58774D-8426-4BBA-A5A2-9F1491F210D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Domain", "SenseMining.Domain\SenseMining.Domain.csproj", "{F680A084-DB0C-486A-AC6E-F87B72F855B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Domain", "SenseMining.Domain\SenseMining.Domain.csproj", "{F680A084-DB0C-486A-AC6E-F87B72F855B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Utils.AspNetCore.Mvc", "SenseMining.Utils.AspNetCore.Mvc\SenseMining.Utils.AspNetCore.Mvc.csproj", "{81043653-2D85-4548-B097-AA7E630A306B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F680A084-DB0C-486A-AC6E-F87B72F855B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F680A084-DB0C-486A-AC6E-F87B72F855B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F680A084-DB0C-486A-AC6E-F87B72F855B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81043653-2D85-4548-B097-AA7E630A306B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81043653-2D85-4548-B097-AA7E630A306B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81043653-2D85-4548-B097-AA7E630A306B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81043653-2D85-4548-B097-AA7E630A306B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

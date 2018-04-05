@@ -13,5 +13,16 @@ namespace SenseMining.Entities
         public Transaction Transaction { get; set; }
 
         public Product Product { get; set; }
+
+        public TransactionItem()
+        {
+            
+        }
+
+        public TransactionItem(int transactionId, int productId)
+        {
+            TransactionId = transactionId;
+            ProductId = productId;
+        }
     }
 }

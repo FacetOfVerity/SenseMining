@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using SenseMining.Database;
+using SenseMining.Utils.AspNetCore.Mvc;
 
 namespace SenseMining.API
 {
@@ -7,7 +9,9 @@ namespace SenseMining.API
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            BuildWebHost(args)
+                .MigrateDatabase<DatabaseContext>()
+                .Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

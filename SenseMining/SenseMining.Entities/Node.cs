@@ -20,5 +20,17 @@ namespace SenseMining.Entities
         public Node Parent { get; set; }
 
         public ICollection<Node> Children { get; set; }
+
+        public Node()
+        {
+            
+        }
+
+        public Node(int id, int? parentId, int score)
+        {
+            Id = id;
+            ParentId = parentId;
+            Score = score;
+        }
     }
 }
