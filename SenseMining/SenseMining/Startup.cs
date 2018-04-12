@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SenseMining.Database;
+using SenseMining.Domain.Extensions;
 using SenseMining.Utils.AspNetCore.Mvc.Filters;
 
 namespace SenseMining.API
@@ -46,6 +47,8 @@ namespace SenseMining.API
                 options.UseNpgsql(Configuration["ConnectionStrings:SenseMiningStore"],
                     o => o.MigrationsAssembly("SenseMining.API"));
             });
+
+            services.AddDomain();
         }
 
         
