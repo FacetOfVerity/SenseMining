@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,10 +9,10 @@ namespace SenseMining.Entities
     {
         [Key]
         [ForeignKey(nameof(Product))]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey(nameof(Parent))]
-        public int? ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         public int Score { get; set; }
 
@@ -26,7 +27,7 @@ namespace SenseMining.Entities
             
         }
 
-        public Node(int id, int? parentId, int score)
+        public Node(Guid id, Guid? parentId, int score)
         {
             Id = id;
             ParentId = parentId;

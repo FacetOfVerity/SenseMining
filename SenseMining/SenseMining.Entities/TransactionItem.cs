@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SenseMining.Entities
 {
     public class TransactionItem
     {
         [ForeignKey(nameof(Transaction))]
-        public int TransactionId { get; set; }
+        public Guid TransactionId { get; set; }
 
         [ForeignKey(nameof(Product))]
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
 
         public Transaction Transaction { get; set; }
 
@@ -19,7 +20,7 @@ namespace SenseMining.Entities
             
         }
 
-        public TransactionItem(int transactionId, int productId)
+        public TransactionItem(Guid transactionId, Guid productId)
         {
             TransactionId = transactionId;
             ProductId = productId;

@@ -1,24 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SenseMining.Domain;
+using SenseMining.Domain.TransactionsProcessing;
 
 namespace SenseMining.API.Controllers
 {
     [Route("Transactions")]
     public class TransactionsController : Controller
     {
-        private readonly ITransactionsService _transactionsService;
+        private readonly ITransactionsConsumer _transactionsConsumer;
 
-        public TransactionsController(ITransactionsService transactionsService)
+        public TransactionsController(ITransactionsConsumer transactionsConsumer)
         {
-            _transactionsService = transactionsService;
+            _transactionsConsumer = transactionsConsumer;
         }
+
 
         [HttpPost]
         public async Task PostTransaction(List<string> products)
         {
-            await _transactionsService.PostTransaction(products);
+            await _transactionsConsumer.ReceiveTransaction(products);
         }
     }
 }

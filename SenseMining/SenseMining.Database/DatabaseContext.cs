@@ -10,8 +10,6 @@ namespace SenseMining.Database
 
         public ICollection<Node> FpTree { get; set; }
 
-        public ICollection<ProductFrequency> Frequencies { get; set; }
-
         public ICollection<Transaction> Transactions { get; set; }
 
         public ICollection<TransactionItem> TransactionItems { get; set; }
@@ -28,7 +26,6 @@ namespace SenseMining.Database
             modelBuilder.Entity<TransactionItem>().HasKey(a => new {a.TransactionId, a.ProductId});
             modelBuilder.Entity<Product>().HasKey(a => a.Id);
             modelBuilder.Entity<Node>().HasKey(a => a.Id);
-            modelBuilder.Entity<ProductFrequency>().HasKey(a => a.ProductId);
         }
     }
 }

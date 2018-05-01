@@ -22,9 +22,9 @@ namespace SenseMining.API.Migrations
 
             modelBuilder.Entity("SenseMining.Entities.Node", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<Guid>("Id");
 
-                    b.Property<int?>("ParentId");
+                    b.Property<Guid?>("ParentId");
 
                     b.Property<int>("Score");
 
@@ -37,8 +37,10 @@ namespace SenseMining.API.Migrations
 
             modelBuilder.Entity("SenseMining.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<long>("Frequency");
 
                     b.Property<string>("Name")
                         .HasMaxLength(500);
@@ -48,20 +50,9 @@ namespace SenseMining.API.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("SenseMining.Entities.ProductFrequency", b =>
-                {
-                    b.Property<int>("ProductId");
-
-                    b.Property<long>("Value");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("ProductFrequency");
-                });
-
             modelBuilder.Entity("SenseMining.Entities.Transaction", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.HasKey("Id");
@@ -71,9 +62,9 @@ namespace SenseMining.API.Migrations
 
             modelBuilder.Entity("SenseMining.Entities.TransactionItem", b =>
                 {
-                    b.Property<int>("TransactionId");
+                    b.Property<Guid>("TransactionId");
 
-                    b.Property<int>("ProductId");
+                    b.Property<Guid>("ProductId");
 
                     b.HasKey("TransactionId", "ProductId");
 
@@ -92,14 +83,6 @@ namespace SenseMining.API.Migrations
                     b.HasOne("SenseMining.Entities.Node", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
-                });
-
-            modelBuilder.Entity("SenseMining.Entities.ProductFrequency", b =>
-                {
-                    b.HasOne("SenseMining.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SenseMining.Entities.TransactionItem", b =>

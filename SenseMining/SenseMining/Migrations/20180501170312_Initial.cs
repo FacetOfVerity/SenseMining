@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
@@ -13,8 +12,8 @@ namespace SenseMining.API.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Id = table.Column<Guid>(nullable: false),
+                    Frequency = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
@@ -26,8 +25,7 @@ namespace SenseMining.API.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                    Id = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,8 +36,8 @@ namespace SenseMining.API.Migrations
                 name: "Node",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    ParentId = table.Column<int>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: true),
                     Score = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -60,29 +58,11 @@ namespace SenseMining.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductFrequency",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(nullable: false),
-                    Value = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductFrequency", x => x.ProductId);
-                    table.ForeignKey(
-                        name: "FK_ProductFrequency_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TransactionItem",
                 columns: table => new
                 {
-                    TransactionId = table.Column<int>(nullable: false),
-                    ProductId = table.Column<int>(nullable: false)
+                    TransactionId = table.Column<Guid>(nullable: false),
+                    ProductId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,9 +96,6 @@ namespace SenseMining.API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Node");
-
-            migrationBuilder.DropTable(
-                name: "ProductFrequency");
 
             migrationBuilder.DropTable(
                 name: "TransactionItem");
