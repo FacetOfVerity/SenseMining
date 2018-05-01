@@ -5,6 +5,6 @@ namespace SenseMining.Domain.Services
 {
     public interface ITransactionsService
     {
-        Task InsertTransaction(IEnumerable<string> transactionItems, bool saveImmediately);
+        Task InsertTransaction(List<string> transactionItems);
     }
 }

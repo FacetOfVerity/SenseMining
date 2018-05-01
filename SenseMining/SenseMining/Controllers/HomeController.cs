@@ -10,7 +10,7 @@ namespace SenseMining.API.Controllers
     {
         public IActionResult Index()
         {
-            return new JsonResult("Hello");
+            return Redirect("~/help");
         }
     }
 }

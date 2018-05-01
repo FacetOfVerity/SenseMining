@@ -5,6 +5,6 @@ namespace SenseMining.Domain.TransactionsProcessing
 {
     public interface ITransactionsConsumer
     {
-        Task ReceiveTransaction(IEnumerable<string> transactionItems);
+        Task ReceiveTransaction(List<string> transactionItems);
     }
 }

@@ -11,7 +11,7 @@ using System;
 namespace SenseMining.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180501170312_Initial")]
+    [Migration("20180501185248_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace SenseMining.API.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Node");
+                    b.ToTable("FpTree");
                 });
 
             modelBuilder.Entity("SenseMining.Entities.Product", b =>
@@ -48,7 +48,7 @@ namespace SenseMining.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("SenseMining.Entities.Transaction", b =>
@@ -56,9 +56,11 @@ namespace SenseMining.API.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTimeOffset>("CreationTime");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Transaction");
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("SenseMining.Entities.TransactionItem", b =>
@@ -71,7 +73,7 @@ namespace SenseMining.API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("TransactionItem");
+                    b.ToTable("TransactionItems");
                 });
 
             modelBuilder.Entity("SenseMining.Entities.Node", b =>

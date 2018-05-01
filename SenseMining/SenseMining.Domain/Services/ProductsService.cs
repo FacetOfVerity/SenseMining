@@ -14,20 +14,20 @@ namespace SenseMining.Domain.Services
         private readonly DatabaseContext _dbContext;
         private readonly CancellationToken _cancellationToken;
 
-        public ProductsService(DatabaseContext dbContext, CancellationToken cancellationToken)
+        public ProductsService(DatabaseContext dbContext, CancellationTokenSource cancellationTokenSource)
         {
             _dbContext = dbContext;
-            _cancellationToken = cancellationToken;
+            _cancellationToken = cancellationTokenSource.Token;
         }
 
-        public async Task<List<Product>> DefineTransactionProducts(IEnumerable<string> products)
+        public async Task<List<Product>> DefineTransactionProducts(List<string> products)
         {
             return await _dbContext.Products.AsQueryable()
                 .Where(a => products.Contains(a.Name))
                 .ToListAsync(_cancellationToken);
         }
 
-        public async Task<List<Product>> InsertProducts(IEnumerable<string> products, bool saveImmediately)
+        public async Task<List<Product>> InsertProducts(List<string> products, bool saveImmediately)
         {
             var productsList = products.Select(a => new Product(a)).ToList();
             productsList.ForEach(a => _dbContext.Products.Add(a));

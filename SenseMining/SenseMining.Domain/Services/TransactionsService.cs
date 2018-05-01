@@ -21,7 +21,7 @@ namespace SenseMining.Domain.Services
             _cancellationToken = cancellationTokenSource.Token;
         }
 
-        public async Task InsertTransaction(IEnumerable<string> transactionItems, bool saveImmediately)
+        public async Task InsertTransaction(List<string> transactionItems)
         {
             var existing = await _productsService.DefineTransactionProducts(transactionItems);
             await _productsService.IncrementFrequencies(existing.Select(a => a.Id), false);
@@ -38,17 +38,14 @@ namespace SenseMining.Domain.Services
 
             _dbContext.Transactions.Add(transaction);
 
-            if (saveImmediately)
-            {
-                await _dbContext.SaveChangesAsync(_cancellationToken);
-            }
+            await _dbContext.SaveChangesAsync(_cancellationToken);
         }
 
         private async Task<List<Product>> RegisterNewProducts(IEnumerable<string> all, List<Product> existing)
         {
             var newProducts = all.Except(existing.Select(a => a.Name));
 
-            return await _productsService.InsertProducts(newProducts, false);
+            return await _productsService.InsertProducts(newProducts.ToList(), false);
         }
     }
 }

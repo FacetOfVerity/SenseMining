@@ -6,26 +6,27 @@ namespace SenseMining.Database
 {
     public class DatabaseContext : DbContext
     {
-        public ICollection<Product> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-        public ICollection<Node> FpTree { get; set; }
+        public DbSet<Node> FpTree { get; set; }
 
-        public ICollection<Transaction> Transactions { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
-        public ICollection<TransactionItem> TransactionItems { get; set; }
+        public DbSet<TransactionItem> TransactionItems { get; set; }
 
         public DatabaseContext(DbContextOptions options) : base(options)
         {
             
         }
+        public DatabaseContext() : base()
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Transaction>().HasKey(a => a.Id);
             modelBuilder.Entity<TransactionItem>().HasKey(a => new {a.TransactionId, a.ProductId});
-            modelBuilder.Entity<Product>().HasKey(a => a.Id);
-            modelBuilder.Entity<Node>().HasKey(a => a.Id);
         }
     }
 }
