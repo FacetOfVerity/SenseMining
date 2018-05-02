@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SenseMining.Domain\SenseMining.Domain.csproj" />
     <ProjectReference Include="..\SenseMining.Utils.AspNetCore.Mvc\SenseMining.Utils.AspNetCore.Mvc.csproj" />
+    <ProjectReference Include="..\SenseMining.Worker\SenseMining.Worker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.0-preview1-final" />

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Domain", "Sense
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Utils.AspNetCore.Mvc", "SenseMining.Utils.AspNetCore.Mvc\SenseMining.Utils.AspNetCore.Mvc.csproj", "{81043653-2D85-4548-B097-AA7E630A306B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Worker", "SenseMining.Worker\SenseMining.Worker.csproj", "{C60F7E93-831F-46D9-B63E-C641E7BD1148}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{81043653-2D85-4548-B097-AA7E630A306B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81043653-2D85-4548-B097-AA7E630A306B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81043653-2D85-4548-B097-AA7E630A306B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C60F7E93-831F-46D9-B63E-C641E7BD1148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C60F7E93-831F-46D9-B63E-C641E7BD1148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C60F7E93-831F-46D9-B63E-C641E7BD1148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C60F7E93-831F-46D9-B63E-C641E7BD1148}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

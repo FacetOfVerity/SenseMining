@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace SenseMining.Domain.Services
 {
     public class FpTreeService : IFpTreeService
     {
-        public Task UpdateTree()
+        private readonly ILogger<FpTreeService> _logger;
+
+        public FpTreeService(ILogger<FpTreeService> logger)
         {
-            throw new NotImplementedException();
+            _logger = logger;
+        }
+
+        public async Task UpdateTree()
+        {
+            _logger.LogInformation("Дерево обновлено");
+            await Task.CompletedTask;
         }
     }
 }

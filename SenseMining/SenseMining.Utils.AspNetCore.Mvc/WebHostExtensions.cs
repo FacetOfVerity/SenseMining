@@ -28,6 +28,19 @@ namespace SenseMining.Utils.AspNetCore.Mvc
         }
 
         /// <summary>
+        /// Выполенение операции с сервисом при запуске приложения
+        /// </summary>
+        /// <typeparam name="TService">Тип сервиса</typeparam>
+        /// <param name="host"><see cref="IWebHost"/></param>
+        /// <param name="setUpAction">Делегат операции</param>
+        public static IWebHost SetUpWithSingleton<TService>(this IWebHost host, Action<TService> setUpAction)
+        {
+           
+
+            return host;
+        }
+
+        /// <summary>
         /// Миграция БД
         /// </summary>
         /// <typeparam name="TContext">Тип контекста БД</typeparam>

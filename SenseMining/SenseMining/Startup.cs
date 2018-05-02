@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using SenseMining.Database;
 using SenseMining.Domain.Extensions;
 using SenseMining.Utils.AspNetCore.Mvc.Filters;
+using SenseMining.Worker.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SenseMining.API
@@ -67,6 +68,7 @@ namespace SenseMining.API
             });
 
             services.AddDomain();
+            services.AddFpTreeJobs();
         }
 
         
