@@ -27,6 +27,7 @@ namespace SenseMining.Database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<TransactionItem>().HasKey(a => new {a.TransactionId, a.ProductId});
+            //modelBuilder.Entity<Node>().HasMany(a => a.Children).WithOne(a => a.Parent).HasForeignKey(a => a.ParentId);
         }
     }
 }

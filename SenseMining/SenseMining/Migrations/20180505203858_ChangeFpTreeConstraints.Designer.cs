@@ -11,9 +11,10 @@ using System;
 namespace SenseMining.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20180505203858_ChangeFpTreeConstraints")]
+    partial class ChangeFpTreeConstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,7 +28,7 @@ namespace SenseMining.API.Migrations
 
                     b.Property<Guid?>("ParentId");
 
-                    b.Property<Guid?>("ProductId");
+                    b.Property<Guid>("ProductId");
 
                     b.Property<int>("Score");
 
@@ -88,7 +89,8 @@ namespace SenseMining.API.Migrations
 
                     b.HasOne("SenseMining.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SenseMining.Entities.TransactionItem", b =>

@@ -8,11 +8,13 @@ namespace SenseMining.Entities
     public class Node
     {
         [Key]
-        [ForeignKey(nameof(Product))]
         public Guid Id { get; set; }
 
         [ForeignKey(nameof(Parent))]
         public Guid? ParentId { get; set; }
+
+        [ForeignKey(nameof(Product))]
+        public Guid? ProductId { get; set; }
 
         public int Score { get; set; }
 
@@ -24,14 +26,20 @@ namespace SenseMining.Entities
 
         public Node()
         {
-            
+            Id = Guid.NewGuid();
+            Children = new List<Node>();  
         }
 
-        public Node(Guid id, Guid? parentId, int score)
+        public Node(Guid productId, Guid? parentId, int score) : this()
         {
-            Id = id;
+            ProductId = productId;
             ParentId = parentId;
             Score = score;
+        }
+
+        public override string ToString()
+        {
+            return $"{Id} count={Score}";
         }
     }
 }

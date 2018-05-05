@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SenseMining.Database;
 using SenseMining.Entities;
 
@@ -39,6 +41,13 @@ namespace SenseMining.Domain.Services
             _dbContext.Transactions.Add(transaction);
 
             await _dbContext.SaveChangesAsync(_cancellationToken);
+        }
+
+        public async Task<List<Transaction>> GetLastTransactions(DateTimeOffset dateFrom)
+        {
+            return await _dbContext.Transactions
+                .Include(a => a.Items).ThenInclude(a => a.Product)
+                .Where(a => a.CreationTime >= dateFrom).ToListAsync(_cancellationToken);
         }
 
         private async Task<List<Product>> RegisterNewProducts(IEnumerable<string> all, List<Product> existing)

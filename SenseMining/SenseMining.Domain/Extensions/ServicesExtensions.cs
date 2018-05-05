@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SenseMining.Domain.Services;
+using SenseMining.Domain.Services.FpTree;
 using SenseMining.Domain.TransactionsProcessing;
 
 namespace SenseMining.Domain.Extensions

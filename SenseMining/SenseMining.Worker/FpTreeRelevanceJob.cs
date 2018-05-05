@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SenseMining.Domain.Services;
+using SenseMining.Domain.Services.FpTree;
 using SenseMining.Worker.Abstractions;
 
 namespace SenseMining.Worker
@@ -14,7 +14,7 @@ namespace SenseMining.Worker
             _fpTreeService = fpTreeService;
         }
 
-        public TimeSpan Interval => TimeSpan.FromSeconds(15);
+        public TimeSpan Interval => TimeSpan.FromHours(24);
 
         public async Task Execute()
         {

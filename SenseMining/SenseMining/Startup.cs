@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SenseMining.Database;
 using SenseMining.Domain.Extensions;
+using SenseMining.Domain.Utils;
 using SenseMining.Utils.AspNetCore.Mvc.Filters;
 using SenseMining.Worker.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
@@ -65,6 +67,11 @@ namespace SenseMining.API
                     return new CancellationTokenSource();
                 return CancellationTokenSource.CreateLinkedTokenSource(
                     accessor.HttpContext.RequestAborted);
+            });
+
+            services.AddAutoMapper(a =>
+            {
+                a.AddProfile(typeof(DomainMappingProfile));
             });
 
             services.AddDomain();

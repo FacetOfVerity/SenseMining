@@ -12,5 +12,7 @@ namespace SenseMining.Domain.Services
         Task<List<Product>> InsertProducts(List<string> products, bool saveImmediately);
 
         Task IncrementFrequencies(IEnumerable<Guid> productsIds, bool saveImmediately);
+
+        Task<List<Product>> GetOrderedProducts();
     }
 }
