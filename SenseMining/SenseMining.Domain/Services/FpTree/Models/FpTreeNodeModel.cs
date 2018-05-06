@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SenseMining.Entities;
 
 namespace SenseMining.Domain.Services.FpTree.Models
 {
@@ -7,7 +6,7 @@ namespace SenseMining.Domain.Services.FpTree.Models
     {
         public int Score { get; set; }
 
-        public Product Product { get; set; }
+        public string Product { get; set; }
 
         public List<FpTreeNodeModel> Children { get; set; }
     }

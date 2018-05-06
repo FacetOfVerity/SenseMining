@@ -8,7 +8,7 @@ namespace SenseMining.Domain.Utils
     {
         public DomainMappingProfile()
         {
-            CreateMap<Node, FpTreeNodeModel>();//.ForMember(a => a.Children, a => a.ExplicitExpansion());
+            CreateMap<Node, FpTreeNodeModel>().ForMember(a => a.Product, a => a.MapFrom(node => node.Product.Name));
         }
     }
 }

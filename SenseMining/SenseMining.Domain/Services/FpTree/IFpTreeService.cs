@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SenseMining.Domain.Services.FpTree.Models;
 
 namespace SenseMining.Domain.Services.FpTree
@@ -8,5 +9,7 @@ namespace SenseMining.Domain.Services.FpTree
         Task<FpTreeModel> GetTreeFromDatabase();
 
         Task UpdateTree();
+
+        Task<List<FrequentItemsetModel>> GetFrequentItemsets(int minSupport);
     }
 }

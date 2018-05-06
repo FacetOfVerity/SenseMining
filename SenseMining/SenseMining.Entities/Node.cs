@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SenseMining.Entities
 {
-    public class Node
+    public class Node : ICloneable
     {
         [Key]
         public Guid Id { get; set; }
@@ -16,7 +16,7 @@ namespace SenseMining.Entities
         [ForeignKey(nameof(Product))]
         public Guid? ProductId { get; set; }
 
-        public int Score { get; set; }
+        public int Support { get; set; }
 
         public Product Product { get; set; }
 
@@ -30,16 +30,34 @@ namespace SenseMining.Entities
             Children = new List<Node>();  
         }
 
-        public Node(Guid productId, Guid? parentId, int score) : this()
+        public Node(Guid productId, Guid? parentId, int support) : this()
         {
             ProductId = productId;
             ParentId = parentId;
-            Score = score;
+            Support = support;
         }
 
         public override string ToString()
         {
-            return $"{Id} count={Score}";
+            return $"{Id} Support={Support}";
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
+
+        [NotMapped]
+        public bool IsRoot => !ParentId.HasValue;
+
+        [NotMapped]
+        public IEnumerable<Node> PathToRoot
+        {
+            get
+            {
+                var n = this;
+                while (!(n = n.Parent).IsRoot) yield return n;
+            }
         }
     }
 }

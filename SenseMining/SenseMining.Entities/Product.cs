@@ -21,5 +21,10 @@ namespace SenseMining.Entities
             Frequency = 1;
             Name = name;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -46,11 +46,61 @@ namespace SenseMining.Domain.Services.FpTree
         public async Task UpdateTree()
         {
             await ClearTree();
+
             var order = await _productsService.GetOrderedProducts();
             var comparer = new ProductsComparer(order);
 
             var transactions = await _transactionsService.GetLastTransactions(DateTimeOffset.Now.AddDays(-1));
+            var root = BuildTree(transactions, comparer);
 
+            _dbContext.FpTree.Add(root);
+
+            await _dbContext.SaveChangesAsync(_cancellationToken);
+        }
+
+        public async Task<List<FrequentItemsetModel>> GetFrequentItemsets(int minSupport)
+        {
+            var products = await _productsService.GetOrderedProducts();
+            var tree = await _dbContext.FpTree.Include(a => a.Parent).ToListAsync(_cancellationToken);
+
+            var result = new List<FrequentItemsetModel>();
+
+            foreach (var product in products)
+            {
+                var conditionalBase = tree.Where(a => a.ProductId == product.Id)
+                    .Select(a => a.PathToRoot.Select(n => new
+                    {
+                        n.ProductId,
+                        a.Support,
+                        n.Product
+                    }));
+
+                var pairs = conditionalBase.SelectMany(a => a)
+                    .GroupBy(a => a.ProductId)
+                    .Select(a => new
+                    {
+                        ProductId = a.Key,
+                        a.First().Product,
+                        Support = a.Sum(p => p.Support)
+                    })
+                    .Where(a => a.Support >= minSupport).Select(a => new FrequentItemsetModel
+                    {
+                        Support = a.Support,
+                        Products = new List<Product>
+                        {
+                            product,
+                            a.Product
+                        }
+                    });
+
+                result.AddRange(pairs);
+            }
+
+            return result;
+        }
+
+        private Node BuildTree(List<Transaction> transactions, ProductsComparer comparer)
+        {
             var root = new Node();
 
             foreach (var transaction in transactions)
@@ -65,7 +115,7 @@ namespace SenseMining.Domain.Services.FpTree
 
                     if ((tempNode = tempRoot.Children.FirstOrDefault(c => c.ProductId == aNode.ProductId)) != null)
                     {
-                        tempNode.Score++;
+                        tempNode.Support++;
                         tempRoot = tempNode;
                     }
                     else
@@ -76,9 +126,7 @@ namespace SenseMining.Domain.Services.FpTree
                 }
             }
 
-
-            _dbContext.FpTree.Add(root);
-            await _dbContext.SaveChangesAsync(_cancellationToken);
+            return root;
         }
 
         private async Task ClearTree()
