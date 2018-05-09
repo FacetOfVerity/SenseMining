@@ -64,7 +64,7 @@ namespace SenseMining.Domain.Services.FpTree
             _dbContext.UpdateHistory.Add(new FpTreeUpdateInfo(root.Id, DateTimeOffset.UtcNow));
         }
 
-        public async Task<List<FrequentItemsetModel>> ExtractFrequentItemsets(int minSupport)
+        public async Task<List<FrequentItemsetModel>> ExtractFrequentItemsets(int minSupport) //TODO ограничить минимальный порог поддержки
         {
             var products = await _productsService.GetOrderedProducts();
             var tree = await _fpTreeProvider.GetActualFpTree();
