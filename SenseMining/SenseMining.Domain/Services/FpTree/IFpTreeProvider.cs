@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SenseMining.Domain.Services.FpTree.Models;
+using SenseMining.Entities;
 
 namespace SenseMining.Domain.Services.FpTree
 {
-    public interface IFpTreeService
+    public interface IFpTreeProvider
     {
-        Task UpdateTree();
+        Task<List<Node>> GetActualFpTree();
 
-        Task<List<FrequentItemsetModel>> ExtractFrequentItemsets(int minSupport);
+        Task<FpTreeModel> GetFpTreeModel();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SenseMining.Domain.Services.FpTree;
@@ -11,16 +10,18 @@ namespace SenseMining.API.Controllers
     public class FpTreeController : Controller
     {
         private readonly IFpTreeService _fpTreeService;
+        private readonly IFpTreeProvider _fpTreeProvider;
 
-        public FpTreeController(IFpTreeService fpTreeService)
+        public FpTreeController(IFpTreeService fpTreeService, IFpTreeProvider fpTreeProvider)
         {
             _fpTreeService = fpTreeService;
+            _fpTreeProvider = fpTreeProvider;
         }
 
         [HttpGet]
         public async Task<FpTreeModel> GetFpTree()
         {
-            return await _fpTreeService.GetTreeFromDatabase();
+            return await _fpTreeProvider.GetFpTreeModel();
         }
 
         [HttpPut]
@@ -33,7 +34,7 @@ namespace SenseMining.API.Controllers
         [Route("FrequentItemsets")]
         public async Task<object> GetFrequentItemsets([FromQuery] int minSupport)
         {
-            var result = await _fpTreeService.GetFrequentItemsets(minSupport);
+            var result = await _fpTreeService.ExtractFrequentItemsets(minSupport);
             return new
             {
                 result.Count,

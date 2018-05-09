@@ -3,64 +3,71 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using SenseMining.Database;
 using SenseMining.Domain.Services.FpTree.Models;
 using SenseMining.Domain.Utils;
 using SenseMining.Entities;
+using SenseMining.Entities.FpTree;
 
 namespace SenseMining.Domain.Services.FpTree
 {
     public class FpTreeService : IFpTreeService
     {
-        private readonly ILogger<FpTreeService> _logger;
+        private readonly IFpTreeProvider _fpTreeProvider;
         private readonly ITransactionsService _transactionsService;
         private readonly IProductsService _productsService;
         private readonly DatabaseContext _dbContext;
         private readonly CancellationToken _cancellationToken;
-        private readonly IMapper _mapper;
+        
 
-        public FpTreeService(ILogger<FpTreeService> logger, ITransactionsService transactionsService,
-            IProductsService productsService, DatabaseContext dbContext,
-            CancellationTokenSource cancellationTokenSource, IMapper mapper)
+        public FpTreeService(IFpTreeProvider fpTreeProvider, ITransactionsService transactionsService,
+            IProductsService productsService, DatabaseContext dbContext, CancellationTokenSource cancellationTokenSource)
         {
-            _logger = logger;
+            _fpTreeProvider = fpTreeProvider;
             _transactionsService = transactionsService;
             _productsService = productsService;
             _dbContext = dbContext;
-            _mapper = mapper;
             _cancellationToken = cancellationTokenSource.Token;
-        }
-
-        public async Task<FpTreeModel> GetTreeFromDatabase()
-        {
-            var tree = await _dbContext.FpTree.Include(a => a.Children).Include(a => a.Product).ToListAsync(_cancellationToken);
-            var root = tree.Single(a => !a.ParentId.HasValue);
-
-            return new FpTreeModel(DateTimeOffset.UtcNow, _mapper.Map<List<FpTreeNodeModel>>(root.Children));
         }
 
         public async Task UpdateTree()
         {
-            await ClearTree();
-
+            var lastUpdate = await _dbContext.UpdateHistory.OrderByDescending(a => a.CreationTime).FirstOrDefaultAsync(_cancellationToken);
             var order = await _productsService.GetOrderedProducts();
-            var comparer = new ProductsComparer(order);
 
-            var transactions = await _transactionsService.GetLastTransactions(DateTimeOffset.Now.AddMonths(-1));
-            var root = BuildTree(transactions, comparer);
+            if (lastUpdate == null)
+            {
+                await BuildNewTree(order);
+            }
+            else
+            {
+                var transactions = await _transactionsService.GetLastTransactions(lastUpdate.CreationTime);
+                //var root = await _dbContext.FpTree.Include(a => a.Children).SingleAsync(a => a.Id == lastUpdate.RootId, _cancellationToken);
+                var tree = await _fpTreeProvider.GetActualFpTree();
+                var root = tree.Single(a => a.Id == lastUpdate.RootId);
 
-            _dbContext.FpTree.Add(root);
+                UpdateTree(transactions, order, root);
+                _dbContext.UpdateHistory.Add(new FpTreeUpdateInfo(root.Id, DateTimeOffset.UtcNow));
+            }
 
             await _dbContext.SaveChangesAsync(_cancellationToken);
         }
 
-        public async Task<List<FrequentItemsetModel>> GetFrequentItemsets(int minSupport)
+        private async Task BuildNewTree(List<Product> order)
+        {
+            var transactions = await _transactionsService.GetLastTransactions(DateTimeOffset.MinValue);
+            var root = new Node();
+
+            UpdateTree(transactions, order, root);
+            _dbContext.FpTree.Add(root);
+            _dbContext.UpdateHistory.Add(new FpTreeUpdateInfo(root.Id, DateTimeOffset.UtcNow));
+        }
+
+        public async Task<List<FrequentItemsetModel>> ExtractFrequentItemsets(int minSupport)
         {
             var products = await _productsService.GetOrderedProducts();
-            var tree = await _dbContext.FpTree.Include(a => a.Parent).ToListAsync(_cancellationToken);
+            var tree = await _fpTreeProvider.GetActualFpTree();
 
             var result = new List<FrequentItemsetModel>();
 
@@ -87,10 +94,14 @@ namespace SenseMining.Domain.Services.FpTree
                     foreach (var item in branch)
                     {
                         var support = totalSups[item.ProductId];
+
+                        //Фильтрация редких элементов
                         if (support < minSupport)
                             continue;
 
                         var set = CollectFrequentItemsets(item.Item, support, totalSups);
+
+                        //Фильтрация повторов
                         if (result.Any(a => a.Products.Intersect(set).Count() == set.Count()))
                             continue;
 
@@ -117,9 +128,9 @@ namespace SenseMining.Domain.Services.FpTree
             } while ((node = node.Next) != null);
         }
 
-        private Node BuildTree(List<Transaction> transactions, ProductsComparer comparer)
+        private void UpdateTree(List<Transaction> transactions, List<Product> order, Node root)
         {
-            var root = new Node();
+            var comparer = new ProductsComparer(order);
 
             foreach (var transaction in transactions)
             {
@@ -143,15 +154,6 @@ namespace SenseMining.Domain.Services.FpTree
                     }
                 }
             }
-
-            return root;
-        }
-
-        private async Task ClearTree()
-        {
-            var oldTree = await _dbContext.FpTree.Include(a => a.Children).ToListAsync(_cancellationToken);
-            _dbContext.FpTree.RemoveRange(oldTree);
-            await _dbContext.SaveChangesAsync(_cancellationToken);
         }
     }
 }

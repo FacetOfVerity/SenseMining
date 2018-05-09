@@ -4,7 +4,7 @@ namespace SenseMining.Domain.Services.FpTree.Models
 {
     public class FpTreeNodeModel
     {
-        public int Score { get; set; }
+        public int Support { get; set; }
 
         public string Product { get; set; }
 

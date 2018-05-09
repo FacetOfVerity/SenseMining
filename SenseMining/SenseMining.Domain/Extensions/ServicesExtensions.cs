@@ -12,6 +12,7 @@ namespace SenseMining.Domain.Extensions
             services.AddScoped<ITransactionsService, TransactionsService>();
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<ITransactionsConsumer, TransactionsConsumer>();
+            services.AddScoped<IFpTreeProvider, FpTreeProvider>();
             services.AddScoped<IFpTreeService, FpTreeService>();
 
             return services;

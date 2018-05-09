@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SenseMining.Entities
+﻿namespace SenseMining.Entities.FpTree
 {
     public class ConditionalTreeItem
     {

@@ -47,7 +47,7 @@ namespace SenseMining.Domain.Services
         {
             return await _dbContext.Transactions
                 .Include(a => a.Items).ThenInclude(a => a.Product)
-                .Where(a => a.CreationTime >= dateFrom).ToListAsync(_cancellationToken);
+                .Where(a => a.CreationTime >= dateFrom).AsNoTracking().ToListAsync(_cancellationToken);
         }
 
         private async Task<List<Product>> RegisterNewProducts(IEnumerable<string> all, List<Product> existing)

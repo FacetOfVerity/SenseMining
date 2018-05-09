@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SenseMining.Entities.FpTree;
 
 namespace SenseMining.Entities
 {
-    public class Node : ICloneable
+    public class Node
     {
         [Key]
         public Guid Id { get; set; }
@@ -40,11 +41,6 @@ namespace SenseMining.Entities
         public override string ToString()
         {
             return Product?.ToString() ?? "no product";
-        }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
         }
 
         [NotMapped]

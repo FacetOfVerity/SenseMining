@@ -54,7 +54,8 @@ namespace SenseMining.Domain.Services
 
         public async Task<List<Product>> GetOrderedProducts()
         {
-            return await _dbContext.Products.OrderByDescending(a => a.Frequency).ToListAsync(_cancellationToken);
+            return await _dbContext.Products.OrderByDescending(a => a.Frequency).AsNoTracking()
+                .ToListAsync(_cancellationToken);
         }
     }
 }
