@@ -39,7 +39,7 @@ namespace SenseMining.Entities
 
         public override string ToString()
         {
-            return $"{Id} Support={Support}";
+            return Product?.ToString() ?? "no product";
         }
 
         public object Clone()
@@ -51,12 +51,24 @@ namespace SenseMining.Entities
         public bool IsRoot => !ParentId.HasValue;
 
         [NotMapped]
-        public IEnumerable<Node> PathToRoot
+        public IEnumerable<ConditionalTreeItem> PathToRoot
         {
             get
             {
-                var n = this;
-                while (!(n = n.Parent).IsRoot) yield return n;
+                var node = this;
+                var next = new ConditionalTreeItem(node);
+
+                while (!(node = node.Parent).IsRoot)
+                {
+                    var result = new ConditionalTreeItem
+                    {
+                        Node = node,
+                        Next = next
+                    };
+                    yield return result;
+
+                    next = result;
+                }
             }
         }
     }

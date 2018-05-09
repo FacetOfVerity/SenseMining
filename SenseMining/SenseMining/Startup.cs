@@ -76,6 +76,7 @@ namespace SenseMining.API
 
             services.AddDomain();
             services.AddFpTreeJobs();
+            services.AddScoped<DataInitializer>();
         }
 
         

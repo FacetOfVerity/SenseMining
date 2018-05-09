@@ -7,6 +7,6 @@ namespace SenseMining.Domain.Services.FpTree.Models
     {
         public int Support { get; set; }
 
-        public List<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 }

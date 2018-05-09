@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using SenseMining.Database;
+using SenseMining.Domain.Utils;
 using SenseMining.Utils.AspNetCore.Mvc;
 using SenseMining.Worker;
 
@@ -12,7 +13,8 @@ namespace SenseMining.API
         {
             BuildWebHost(args)
                 .MigrateDatabase<DatabaseContext>()
-                .SetUpWithService<FpTreeRelevanceWorker>(a => a.Run())
+                .SetUpWithService<DataInitializer>(a => a.Initialize().Wait())
+                //.SetUpWithService<FpTreeRelevanceWorker>(a => a.Run())
                 .Run();
         }
 

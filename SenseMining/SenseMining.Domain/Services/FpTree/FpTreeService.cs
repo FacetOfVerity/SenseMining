@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SenseMining.Database;
@@ -50,7 +49,7 @@ namespace SenseMining.Domain.Services.FpTree
             var order = await _productsService.GetOrderedProducts();
             var comparer = new ProductsComparer(order);
 
-            var transactions = await _transactionsService.GetLastTransactions(DateTimeOffset.Now.AddDays(-1));
+            var transactions = await _transactionsService.GetLastTransactions(DateTimeOffset.Now.AddMonths(-1));
             var root = BuildTree(transactions, comparer);
 
             _dbContext.FpTree.Add(root);
@@ -67,36 +66,55 @@ namespace SenseMining.Domain.Services.FpTree
 
             foreach (var product in products)
             {
+                //Условный базис
                 var conditionalBase = tree.Where(a => a.ProductId == product.Id)
-                    .Select(a => a.PathToRoot.Select(n => new
-                    {
-                        n.ProductId,
-                        a.Support,
-                        n.Product
-                    }));
-
-                var pairs = conditionalBase.SelectMany(a => a)
-                    .GroupBy(a => a.ProductId)
-                    .Select(a => new
-                    {
-                        ProductId = a.Key,
-                        a.First().Product,
-                        Support = a.Sum(p => p.Support)
-                    })
-                    .Where(a => a.Support >= minSupport).Select(a => new FrequentItemsetModel
-                    {
-                        Support = a.Support,
-                        Products = new List<Product>
+                    .Select(a => a.PathToRoot.Select(n =>
+                        new
                         {
-                            product,
-                            a.Product
-                        }
-                    });
+                            ProductId = n.Node.ProductId.Value,
+                            n.Node.Product,
+                            n.Node.Support,
+                            ConditionalSupport = a.Support,
+                            Item = n
+                        }));
 
-                result.AddRange(pairs);
+                //Суммарная поддержка каждого элемента в условном базисе
+                var totalSups = conditionalBase.SelectMany(a => a)
+                    .GroupBy(a => a.ProductId).ToDictionary(a => a.Key, a => a.Sum(p => p.ConditionalSupport));
+
+                foreach (var branch in conditionalBase)
+                {
+                    foreach (var item in branch)
+                    {
+                        var support = totalSups[item.ProductId];
+                        if (support < minSupport)
+                            continue;
+
+                        var set = CollectFrequentItemsets(item.Item, support, totalSups);
+                        if (result.Any(a => a.Products.Intersect(set).Count() == set.Count()))
+                            continue;
+
+                        result.Add(new FrequentItemsetModel
+                        {
+                            Support = support,
+                            Products = set
+                        });
+                    }
+                }
             }
 
             return result;
+        }
+
+        private IEnumerable<Product> CollectFrequentItemsets(ConditionalTreeItem root, int support, Dictionary<Guid, int> totalSups)
+        {
+            var node = root;
+            do
+            {
+                if (totalSups.TryGetValue(node.Node.ProductId.Value, out int s) && s < support) continue;
+
+                yield return node.Node.Product;
+            } while ((node = node.Next) != null);
         }
 
         private Node BuildTree(List<Transaction> transactions, ProductsComparer comparer)
