@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SenseMining.Entities.FpTree;
 
-namespace SenseMining.Entities
+namespace SenseMining.Entities.FpTree
 {
     public class Node
     {

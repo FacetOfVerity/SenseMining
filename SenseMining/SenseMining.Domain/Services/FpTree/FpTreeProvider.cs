@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SenseMining.Database;
 using SenseMining.Domain.Services.FpTree.Models;
 using SenseMining.Entities;
+using SenseMining.Entities.FpTree;
 
 namespace SenseMining.Domain.Services.FpTree
 {

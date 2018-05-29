@@ -31,45 +31,57 @@ namespace SenseMining.Domain.Services.FpTree
             _cancellationToken = cancellationTokenSource.Token;
         }
 
+        /// <summary>
+        /// Обновление дерева последними зарегистрированными транзакциями
+        /// </summary>
         public async Task UpdateTree()
         {
             var lastUpdate = await _dbContext.UpdateHistory.OrderByDescending(a => a.CreationTime).FirstOrDefaultAsync(_cancellationToken);
+            //Получаем элементы в порядке убывания поддержки
             var order = await _productsService.GetOrderedProducts();
 
-            if (lastUpdate == null)
+            if (lastUpdate == null) //FP-дерево не создано
             {
                 await BuildNewTree(order);
             }
             else
             {
                 var transactions = await _transactionsService.GetLastTransactions(lastUpdate.CreationTime);
-                //var root = await _dbContext.FpTree.Include(a => a.Children).SingleAsync(a => a.Id == lastUpdate.RootId, _cancellationToken);
                 var tree = await _fpTreeProvider.GetActualFpTree();
                 var root = tree.Single(a => a.Id == lastUpdate.RootId);
 
-                UpdateTree(transactions, order, root);
+                PushTransactions(transactions, order, root);
                 _dbContext.UpdateHistory.Add(new FpTreeUpdateInfo(root.Id, DateTimeOffset.UtcNow));
             }
 
             await _dbContext.SaveChangesAsync(_cancellationToken);
         }
 
+        /// <summary>
+        /// Постороение нового дерева
+        /// </summary>
+        /// <param name="order">Порядок сортировки</param>
         private async Task BuildNewTree(List<Product> order)
         {
             var transactions = await _transactionsService.GetLastTransactions(DateTimeOffset.MinValue);
             var root = new Node();
 
-            UpdateTree(transactions, order, root);
+            PushTransactions(transactions, order, root);
             _dbContext.FpTree.Add(root);
             _dbContext.UpdateHistory.Add(new FpTreeUpdateInfo(root.Id, DateTimeOffset.UtcNow));
         }
 
+        /// <summary>
+        /// Извлечение частых наборов из актуального дерева
+        /// </summary>
+        /// <param name="minSupport">Минимальная поддержка</param>
         public async Task<List<FrequentItemsetModel>> ExtractFrequentItemsets(int minSupport) //TODO ограничить минимальный порог поддержки
         {
             var products = await _productsService.GetOrderedProducts();
             var tree = await _fpTreeProvider.GetActualFpTree();
 
             var result = new List<FrequentItemsetModel>();
+            //var resultSet = new HashSet<FrequentItemsetModel>();
 
             foreach (var product in products)
             {
@@ -117,20 +129,15 @@ namespace SenseMining.Domain.Services.FpTree
             return result;
         }
 
-        private IEnumerable<Product> CollectFrequentItemsets(ConditionalTreeItem root, int support, Dictionary<Guid, int> totalSups)
+        /// <summary>
+        /// Вставка в дерево списка транзакций
+        /// </summary>
+        /// <param name="transactions">Транзакции</param>
+        /// <param name="order">Порядок</param>
+        /// <param name="root">Корневой узел дерева</param>
+        private void PushTransactions(List<Transaction> transactions, List<Product> order, Node root)
         {
-            var node = root;
-            do
-            {
-                if (totalSups.TryGetValue(node.Node.ProductId.Value, out int s) && s < support) continue;
-
-                yield return node.Node.Product;
-            } while ((node = node.Next) != null);
-        }
-
-        private void UpdateTree(List<Transaction> transactions, List<Product> order, Node root)
-        {
-            var comparer = new ProductsComparer(order);
+            var comparer = new ProductsComparer(order); //Компаратор элементов
 
             foreach (var transaction in transactions)
             {
@@ -154,6 +161,20 @@ namespace SenseMining.Domain.Services.FpTree
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Выборка частых наборов из ветви условного базиса
+        /// </summary>
+        private IEnumerable<Product> CollectFrequentItemsets(ConditionalTreeItem root, int support, Dictionary<Guid, int> totalSups)
+        {
+            var node = root;
+            do
+            {
+                if (totalSups.TryGetValue(node.Node.ProductId.Value, out int s) && s < support) continue;
+
+                yield return node.Node.Product;
+            } while ((node = node.Next) != null);
         }
     }
 }

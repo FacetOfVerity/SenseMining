@@ -44,7 +44,7 @@ namespace SenseMining.Domain.Services
         {
             var products = await _dbContext.Products.AsQueryable().Where(a => productsIds.Contains(a.Id))
                 .ToListAsync(_cancellationToken);
-            products.ForEach(a => a.Frequency++);
+            products.ForEach(a => a.Support++);
 
             if (saveImmediately)
             {
@@ -54,7 +54,7 @@ namespace SenseMining.Domain.Services
 
         public async Task<List<Product>> GetOrderedProducts()
         {
-            return await _dbContext.Products.OrderByDescending(a => a.Frequency).AsNoTracking()
+            return await _dbContext.Products.OrderByDescending(a => a.Support).AsNoTracking()
                 .ToListAsync(_cancellationToken);
         }
     }

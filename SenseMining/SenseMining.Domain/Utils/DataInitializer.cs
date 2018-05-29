@@ -92,7 +92,7 @@ namespace SenseMining.Domain.Utils
 
                     count++;
 
-                    if (count == 400) break;
+                    if (count == 200) break;
                 }
             }
         }
