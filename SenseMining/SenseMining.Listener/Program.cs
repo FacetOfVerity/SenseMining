@@ -26,6 +26,14 @@ namespace SenseMining.Listener
             {
                 services.AddDomain();
                 services.AddScoped<TransactionsQueueListener>();
+                services.AddSingleton(new RabbitMqOptions
+                {
+                    HostName = "localhost",
+                    ExchangeName = "SenseMining",
+                    QueueName = "SenseMining_Transactions",
+                    Password = "guest",
+                    UserName = "guest"
+                });
             });
         }
     }

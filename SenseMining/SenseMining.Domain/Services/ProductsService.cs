@@ -27,7 +27,8 @@ namespace SenseMining.Domain.Services
                 .ToListAsync(_cancellationToken);
         }
 
-        public async Task<List<Product>> InsertProducts(List<string> products, bool saveImmediately)
+        public async Task<List<Product>> InsertProducts(List<string> products,
+            bool saveImmediately)
         {
             var productsList = products.Select(a => new Product(a)).ToList();
             productsList.ForEach(a => _dbContext.Products.Add(a));
@@ -40,9 +41,11 @@ namespace SenseMining.Domain.Services
             return productsList;
         }
 
-        public async Task IncrementFrequencies(IEnumerable<Guid> productsIds, bool saveImmediately)
+        public async Task IncrementFrequencies(IEnumerable<Guid> productsIds,
+            bool saveImmediately)
         {
-            var products = await _dbContext.Products.AsQueryable().Where(a => productsIds.Contains(a.Id))
+            var products = await _dbContext.Products.AsQueryable()
+                .Where(a =>productsIds.Contains(a.Id))
                 .ToListAsync(_cancellationToken);
             products.ForEach(a => a.Support++);
 

@@ -43,6 +43,14 @@ namespace SenseMining.Domain.Services
             await _dbContext.SaveChangesAsync(_cancellationToken);
         }
 
+        private async Task<List<Product>> RegisterNewProducts(IEnumerable<string> all,
+            List<Product> existing)
+        {
+            var newProducts = all.Except(existing.Select(a => a.Name));
+
+            return await _productsService.InsertProducts(newProducts.ToList(), false);
+        }
+
         public async Task<List<Transaction>> GetLastTransactions(DateTimeOffset dateFrom)
         {
             return await _dbContext.Transactions
@@ -50,11 +58,5 @@ namespace SenseMining.Domain.Services
                 .Where(a => a.CreationTime >= dateFrom).AsNoTracking().ToListAsync(_cancellationToken);
         }
 
-        private async Task<List<Product>> RegisterNewProducts(IEnumerable<string> all, List<Product> existing)
-        {
-            var newProducts = all.Except(existing.Select(a => a.Name));
-
-            return await _productsService.InsertProducts(newProducts.ToList(), false);
-        }
     }
 }

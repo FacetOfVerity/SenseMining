@@ -21,14 +21,14 @@ namespace SenseMining.Worker
         public void Run()
         {
             _executor.Start();
-            _logger.LogInformation("Актуализатор FP дерева запущен");
+            _logger.LogInformation("Процесс актуализации FP дерева запущен");
         }
 
         public void Dispose()
         {
             _executor.Stop();
             _scope.Dispose();
-            _logger.LogInformation("Актуализатор FP дерева остановлен");
+            _logger.LogInformation("Процесс актуализации FP дерева остановлен");
         }
     }
 }
