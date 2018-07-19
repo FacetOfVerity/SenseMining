@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SenseMining.Domain\SenseMining.Domain.csproj" />
+    <ProjectReference Include="..\SenseMining.Utils\SenseMining.Utils.csproj" />
   </ItemGroup>
 </Project>

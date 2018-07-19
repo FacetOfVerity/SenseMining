@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SenseMining.Listener.Utils
+namespace SenseMining.Utils
 {
     public static class DiConfigurator
     {

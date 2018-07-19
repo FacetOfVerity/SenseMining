@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SenseMining.Domain.Extensions;
 using SenseMining.Listener.RabiitMq;
-using SenseMining.Listener.Utils;
+using SenseMining.Utils;
 
 namespace SenseMining.Listener
 {

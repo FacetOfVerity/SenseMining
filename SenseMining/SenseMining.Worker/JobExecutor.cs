@@ -29,8 +29,7 @@ namespace SenseMining.Worker
         public void Start()
         {
             _nextInterval = TimeSpan.Zero;
-            _thread = new Thread(Execute);
-            _thread.IsBackground = true;
+            _thread = new Thread(Execute) {IsBackground = true};
             _thread.Start();
         }
 
