@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Worker", "Sense
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Listener", "SenseMining.Listener\SenseMining.Listener.csproj", "{5A40A266-BA6C-490D-A845-60377B414766}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Importer", "SenseMining.Importer\SenseMining.Importer.csproj", "{447953D7-0819-430E-926D-950BEF8D175A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Importer", "SenseMining.Importer\SenseMining.Importer.csproj", "{447953D7-0819-430E-926D-950BEF8D175A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Utils", "SenseMining.Utils\SenseMining.Utils.csproj", "{A938529A-DE6D-43D4-ACC6-10B1723C3187}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenseMining.Utils", "SenseMining.Utils\SenseMining.Utils.csproj", "{A938529A-DE6D-43D4-ACC6-10B1723C3187}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SenseMining.Importer.GroceryMarket", "SenseMining.Importer.GroceryMarket\SenseMining.Importer.GroceryMarket.csproj", "{D76823E3-B039-40AF-B958-B3B68B7F4BD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{A938529A-DE6D-43D4-ACC6-10B1723C3187}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A938529A-DE6D-43D4-ACC6-10B1723C3187}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A938529A-DE6D-43D4-ACC6-10B1723C3187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D76823E3-B039-40AF-B958-B3B68B7F4BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D76823E3-B039-40AF-B958-B3B68B7F4BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D76823E3-B039-40AF-B958-B3B68B7F4BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D76823E3-B039-40AF-B958-B3B68B7F4BD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
