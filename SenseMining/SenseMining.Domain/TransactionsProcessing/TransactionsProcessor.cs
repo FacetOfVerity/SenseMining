@@ -6,13 +6,13 @@ using SenseMining.Domain.Services;
 
 namespace SenseMining.Domain.TransactionsProcessing
 {
-    public class TransactionsConsumer : ITransactionsConsumer
+    public class TransactionsProcessor : ITransactionsProcessor
     {
         private readonly DatabaseContext _context;
         private readonly CancellationToken _cancellationToken;
         private readonly ITransactionsService _transactionsService;
 
-        public TransactionsConsumer(DatabaseContext context, CancellationTokenSource cancellationTokenSource,
+        public TransactionsProcessor(DatabaseContext context, CancellationTokenSource cancellationTokenSource,
             ITransactionsService transactionsService)
         {
             _context = context;
@@ -20,7 +20,7 @@ namespace SenseMining.Domain.TransactionsProcessing
             _cancellationToken = cancellationTokenSource.Token;
         }
 
-        public async Task ReceiveTransaction(List<string> transactionItems)
+        public async Task ReceiveTransaction(IEnumerable<string> transactionItems)
         {
             await _transactionsService.InsertTransaction(transactionItems);
         }

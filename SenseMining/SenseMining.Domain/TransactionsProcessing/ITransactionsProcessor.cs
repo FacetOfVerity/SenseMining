@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace SenseMining.Domain.TransactionsProcessing
 {
-    public interface ITransactionsConsumer
+    public interface ITransactionsProcessor
     {
-        Task ReceiveTransaction(List<string> transactionItems);
+        Task ReceiveTransaction(IEnumerable<string> transactionItems);
     }
 }

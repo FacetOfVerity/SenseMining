@@ -1,15 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
-    <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
-    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
+
+    <PackageReference Include="MassTransit" Version="5.1.5" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="5.1.5" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="5.1.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SenseMining.Domain\SenseMining.Domain.csproj" />
     <ProjectReference Include="..\SenseMining.Utils\SenseMining.Utils.csproj" />
+    <ProjectReference Include="..\SenseMining.Domain.MessageContracts\SenseMining.Domain.MessageContracts.csproj" />
   </ItemGroup>
 </Project>
