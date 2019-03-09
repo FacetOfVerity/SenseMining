@@ -16,6 +16,7 @@ namespace SenseMining.API
                 .SetUpWithService<DataInitializer>(a => a.Initialize().Wait())
                 //.SetUpWithService<FpTreeRelevanceWorker>(a => a.Run())
                 .Run();
+
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
