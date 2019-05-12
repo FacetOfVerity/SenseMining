@@ -78,6 +78,7 @@ namespace SenseMining.Listener
                         {
                             e.PrefetchCount = 16;
                             e.UseMessageRetry(x => x.Interval(2, 100));
+                            e.Durable = false;
 
                             e.LoadFrom(provider);
                             EndpointConvention.Map<TransactionsQueueConsumer>(e.InputAddress);

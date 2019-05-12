@@ -49,10 +49,10 @@ namespace SenseMining.Importer.GroceryMarket
                 }
             }
 
-            using (var reader = new ChoCSVReader<SalesRowModel>(Path.Combine(_options.ResourcesPath, "sales", "sales-000.csv")).WithFirstLineHeader())
+            using (var reader = new ChoCSVReader<SalesRowModel>(Path.Combine(@"D:\МГТУ\Магистратура\Семестр 3\Курсач\Данные с kaggle\salesDB_grocery_market", "sales.csv")).WithFirstLineHeader())
             {
-                var groupsByCustomer = reader.Take(300).Where(a => a.SalesDate.HasValue).GroupBy(a => a.CustomerID);
-                var groupsByCustomerByDate = groupsByCustomer.Select(a => new { CustomerID = a.Key, Days = a.GroupBy(b => b.SalesDate.Value.Date) }).Where(a => a.Days.Any()).ToArray();
+                var groupsByCustomer = reader.Where(a => a.SalesDate.HasValue).GroupBy(a => a.CustomerID);
+                var groupsByCustomerByDate = groupsByCustomer.Select(a => new { CustomerID = a.Key, Days = a.GroupBy(b => b.SalesDate.Value.Date).Where(d => d.Count() > 1) }).Where(a => a.Days.Any()).ToArray();
 
                 foreach (var groupByCustomer in groupsByCustomerByDate)
                 {

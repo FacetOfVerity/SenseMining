@@ -18,14 +18,7 @@ namespace SenseMining.Listener
 
         public async Task Consume(ConsumeContext<ITransactionMessage> context)
         {
-            try
-            {
-                await _transactionsProcessor.ReceiveTransaction(context.Message.Items);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            await _transactionsProcessor.ReceiveTransaction(context.Message.Items);
         }
     }
 }

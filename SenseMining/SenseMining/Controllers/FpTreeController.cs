@@ -45,5 +45,21 @@ namespace SenseMining.API.Controllers
                 })
             };
         }
+
+        [HttpGet]
+        [Route("AssociationRules")]
+        public async Task<object> GetAssociationRules([FromQuery] int minSupport, [FromQuery]int minconf)
+        {
+            var result = await _fpTreeService.ExtractFrequentItemsets(minSupport);
+            return new
+            {
+                result.Count,
+                Data = result.Select(a => new
+                {
+                    a.Support,
+                    Products = a.Products.Select(p => p.Name)
+                })
+            };
+        }
     }
 }
