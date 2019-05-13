@@ -6,6 +6,9 @@ using SenseMining.Domain.Services.FpTree.Models;
 
 namespace SenseMining.API.Controllers
 {
+    /// <summary>
+    /// API для работы с FP-деревом
+    /// </summary>
     [Route("FpTree")]
     public class FpTreeController : Controller
     {
@@ -18,18 +21,31 @@ namespace SenseMining.API.Controllers
             _fpTreeProvider = fpTreeProvider;
         }
 
+        /// <summary>
+        /// Получение модели FP-дерева (Json)
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<FpTreeModel> GetFpTree()
         {
             return await _fpTreeProvider.GetFpTreeModel();
         }
 
+        /// <summary>
+        /// Запуск обновления FP-дерева
+        /// </summary>
+        /// <returns></returns>
         [HttpPut]
         public async Task UpdateTree()
         {
             await _fpTreeService.UpdateTree();
         }
 
+        /// <summary>
+        /// Получение частых наборов для заданного значения минимальной поддержки
+        /// </summary>
+        /// <param name="minSupport">Поддержка</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("FrequentItemsets")]
         public async Task<object> GetFrequentItemsets([FromQuery] int minSupport)
@@ -46,6 +62,12 @@ namespace SenseMining.API.Controllers
             };
         }
 
+        /// <summary>
+        /// Получение ассоциативных правил для заданного значения надежности
+        /// </summary>
+        /// <param name="minSupport"></param>
+        /// <param name="minconf"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("AssociationRules")]
         public async Task<object> GetAssociationRules([FromQuery] int minSupport, [FromQuery]int minconf)

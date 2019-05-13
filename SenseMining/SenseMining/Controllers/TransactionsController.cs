@@ -15,7 +15,11 @@ namespace SenseMining.API.Controllers
             _transactionsProcessor = transactionsProcessor;
         }
 
-
+        /// <summary>
+        /// Ручная регистрация транзакции
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task PostTransaction(List<string> products)
         {

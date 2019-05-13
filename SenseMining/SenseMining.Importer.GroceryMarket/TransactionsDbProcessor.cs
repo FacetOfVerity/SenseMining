@@ -13,16 +13,13 @@ namespace SenseMining.Importer.GroceryMarket
 {
     public class TransactionsDbProcessor
     {
-
-        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly ImporterOptions _options;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly Dictionary<int, string> _procucts;
         private readonly Dictionary<int, string> _procuctCategories;
 
-        public TransactionsDbProcessor(CancellationTokenSource cancellationTokenSource, ImporterOptions options, IPublishEndpoint publishEndpoint)
+        public TransactionsDbProcessor(ImporterOptions options, IPublishEndpoint publishEndpoint)
         {
-            _cancellationTokenSource = cancellationTokenSource;
             _options = options;
             _publishEndpoint = publishEndpoint;
             _procucts = new Dictionary<int, string>();
@@ -32,7 +29,8 @@ namespace SenseMining.Importer.GroceryMarket
         public async Task Start()
         {
 
-            using (var reader = new ChoCSVReader<CategoryModel>(Path.Combine(_options.ResourcesPath, "categories.csv")).WithFirstLineHeader())
+            using (var reader = new ChoCSVReader<CategoryModel>(Path.Combine(_options.ResourcesPath, "categories.csv"))
+                .WithFirstLineHeader())
             {
                 foreach (var categoryModel in reader)
                 {
@@ -40,7 +38,8 @@ namespace SenseMining.Importer.GroceryMarket
                 }
             }
 
-            using (var reader = new ChoCSVReader<ProductModel>(Path.Combine(_options.ResourcesPath, "products.csv")).WithFirstLineHeader())
+            using (var reader = new ChoCSVReader<ProductModel>(Path.Combine(_options.ResourcesPath, "products.csv"))
+                .WithFirstLineHeader())
             {
                 foreach (var productModel in reader)
                 {
@@ -49,10 +48,23 @@ namespace SenseMining.Importer.GroceryMarket
                 }
             }
 
-            using (var reader = new ChoCSVReader<SalesRowModel>(Path.Combine(@"D:\МГТУ\Магистратура\Семестр 3\Курсач\Данные с kaggle\salesDB_grocery_market", "sales.csv")).WithFirstLineHeader())
+            using (var reader =
+                new ChoCSVReader<SalesRowModel>(Path.Combine(
+                        @"D:\МГТУ\Магистратура\Семестр 3\Курсач\Данные с kaggle\salesDB_grocery_market", "sales.csv"))
+                    .WithFirstLineHeader())
             {
-                var groupsByCustomer = reader.Where(a => a.SalesDate.HasValue).GroupBy(a => a.CustomerID);
-                var groupsByCustomerByDate = groupsByCustomer.Select(a => new { CustomerID = a.Key, Days = a.GroupBy(b => b.SalesDate.Value.Date).Where(d => d.Count() > 1) }).Where(a => a.Days.Any()).ToArray();
+                var groupsByCustomer = reader
+                    .Where(a => a.SalesDate.HasValue)
+                    .GroupBy(a => a.CustomerID);
+
+                var groupsByCustomerByDate = groupsByCustomer
+                    .Select(a => new
+                    {
+                        CustomerID = a.Key,
+                        Days = a
+                            .GroupBy(b => b.SalesDate.Value.Date)
+                            .Where(d => d.Count() > 1)
+                    }).Where(a => a.Days.Any()).ToArray();
 
                 foreach (var groupByCustomer in groupsByCustomerByDate)
                 {
