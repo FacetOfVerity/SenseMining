@@ -7,9 +7,9 @@ namespace SenseMining.Domain.Services
 {
     public interface IProductsService
     {
-        Task<List<Product>> DefineTransactionProducts(List<string> products);
+        Task<List<Product>> DefineTransactionProducts(IEnumerable<string> products);
 
-        Task<List<Product>> InsertProducts(List<string> products, bool saveImmediately);
+        Task<List<Product>> InsertProducts(IEnumerable<string> products, bool saveImmediately);
 
         Task IncrementFrequencies(IEnumerable<Guid> productsIds, bool saveImmediately);
 

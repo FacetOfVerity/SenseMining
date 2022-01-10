@@ -61,6 +61,8 @@ namespace SenseMining.API.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid?>("CategoryId");
+
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
@@ -68,7 +70,22 @@ namespace SenseMining.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("SenseMining.Entities.ProductCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCategory");
                 });
 
             modelBuilder.Entity("SenseMining.Entities.Transaction", b =>
@@ -113,6 +130,13 @@ namespace SenseMining.API.Migrations
                     b.HasOne("SenseMining.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("SenseMining.Entities.Product", b =>
+                {
+                    b.HasOne("SenseMining.Entities.ProductCategory", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("SenseMining.Entities.TransactionItem", b =>

@@ -8,18 +8,22 @@ namespace SenseMining.API.Controllers
     [Route("Transactions")]
     public class TransactionsController : Controller
     {
-        private readonly ITransactionsConsumer _transactionsConsumer;
+        private readonly ITransactionsProcessor _transactionsProcessor;
 
-        public TransactionsController(ITransactionsConsumer transactionsConsumer)
+        public TransactionsController(ITransactionsProcessor transactionsProcessor)
         {
-            _transactionsConsumer = transactionsConsumer;
+            _transactionsProcessor = transactionsProcessor;
         }
 
-
+        /// <summary>
+        /// Ручная регистрация транзакции
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task PostTransaction(List<string> products)
         {
-            await _transactionsConsumer.ReceiveTransaction(products);
+            await _transactionsProcessor.ReceiveTransaction(products);
         }
     }
 }

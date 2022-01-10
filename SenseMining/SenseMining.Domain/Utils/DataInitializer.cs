@@ -23,10 +23,10 @@ namespace SenseMining.Domain.Utils
 
         public async Task Initialize()
         {
-            if (! await _dbContext.Transactions.AnyAsync())
-            {
-                await MushroomData();
-            }
+            //if (! await _dbContext.Transactions.AnyAsync())
+            //{
+            //    await MushroomData();
+            //}
         }
 
         private async Task SimpleExample()

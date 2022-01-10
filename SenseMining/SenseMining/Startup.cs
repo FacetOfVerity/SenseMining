@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.IO;
+using System.Threading;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,6 +53,7 @@ namespace SenseMining.API
             {
                 options.SwaggerDoc("v1", new Info { Version = "v1", Title = "API", Description = "Service API" });
                 options.DescribeAllEnumsAsStrings();
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "SenseMining.API.xml"));
             });
 
             //Entity framework

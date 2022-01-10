@@ -12,12 +12,12 @@ namespace SenseMining.Importer
     {
         private readonly IMongoCollection<StoredTransactionModel> _dataSource;
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly ITransactionsConsumer _transactionsConsumer;
+        private readonly ITransactionsProcessor _transactionsProcessor;
 
-        public TransactionsDbProcessor(ConnectionOptions options, IMongoDatabase database, CancellationTokenSource cancellationTokenSource, ITransactionsConsumer transactionsConsumer)
+        public TransactionsDbProcessor(ConnectionOptions options, IMongoDatabase database, CancellationTokenSource cancellationTokenSource, ITransactionsProcessor transactionsProcessor)
         {
             _cancellationTokenSource = cancellationTokenSource;
-            _transactionsConsumer = transactionsConsumer;
+            _transactionsProcessor = transactionsProcessor;
             _dataSource = database.GetCollection<StoredTransactionModel>(options.FiscalDataCollectionName);
         }
 
@@ -33,7 +33,7 @@ namespace SenseMining.Importer
                 
                 foreach (var transaction in set)
                 {
-                    await _transactionsConsumer.ReceiveTransaction(transaction.Document.Order.Select(a => a.Name).ToList());
+                    await _transactionsProcessor.ReceiveTransaction(transaction.Document.Order.Select(a => a.Name).ToList());
                 }
 
                 Console.WriteLine($"Еще {step} готовы");

@@ -23,7 +23,7 @@ namespace SenseMining.Domain.Services
             _cancellationToken = cancellationTokenSource.Token;
         }
 
-        public async Task InsertTransaction(List<string> transactionItems)
+        public async Task InsertTransaction(IEnumerable<string> transactionItems)
         {
             var existing = await _productsService.DefineTransactionProducts(transactionItems);
             await _productsService.IncrementFrequencies(existing.Select(a => a.Id), false);

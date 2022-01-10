@@ -7,7 +7,7 @@ namespace SenseMining.Domain.Services
 {
     public interface ITransactionsService
     {
-        Task InsertTransaction(List<string> transactionItems);
+        Task InsertTransaction(IEnumerable<string> transactionItems);
 
         Task<List<Transaction>> GetLastTransactions(DateTimeOffset dateFrom);
     }
