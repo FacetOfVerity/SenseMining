@@ -38,7 +38,7 @@ namespace SenseMining.Importer.GroceryMarket
                 }
             }
 
-            using (var reader = new ChoCSVReader<ProductModel>(Path.Combine(_options.ResourcesPath, "products.csv"))
+            using (var reader = new ChoCSVReader<ProductModel>(Path.Combine(_options.ResourcesPath, "subjects.csv"))
                 .WithFirstLineHeader())
             {
                 foreach (var productModel in reader)
